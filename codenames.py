@@ -59,13 +59,13 @@ async def run(client, message):				#main loop
 	counter = 1
 	for x in key:
 		if x == 0:
-			string1 = string1 + ":eggplant: "
+			string1 = string1 + "<:redagent:423804511182651392> "
 		elif x == 1:
-			string1 = string1 + "<:virgil:260098683507441665> "
+			string1 = string1 + "<:blueagent:423804588886589441> "
 		elif x == 2:
-			string1 = string1 + ":yum: "
+			string1 = string1 + "<:civilian:423804873818112003> "
 		elif x == 3:
-			string1 = string1 + ":ok_hand: "
+			string1 = string1 + "<:assassin:423804572885188608> "
 
 		if counter % 5 == 0:
 			string1 = string1 + "\n"
