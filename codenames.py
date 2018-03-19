@@ -26,6 +26,49 @@ async def run(client, message):				#main loop
 	wordlistlines = 4554					#number of lines in the wordlist you're using
 	winner = ""
 	
+	#Login Phase
+	gamestate = 1
+	await client.send_message(message.channel, "Hello agents, type !red or !blue to join a team. Type !start to begin the game. [4-10 players]")
+	while gamestate == 1:
+		reply = await client.wait_for_message(channel=message.channel)
+		if reply.content == "!red" and len(redTeam) <= 5:
+			if reply.author not in redTeam and reply.author not in blueTeam:
+				joinStr = "Agent {} has successfully joined the red team."
+				await client.send_message(message.channel, joinStr.format(reply.author.mention))
+				redTeam.append(reply.author)
+				fiveStr = "There are currently {} players on the red team."
+				await client.send_message(message.channel, fiveStr.format(len(redTeam)))				
+			else:
+				alreadyJoinedStr = "{} is already in a team or teams are full!"
+				await client.send_message(message.channel, alreadyJoinedStr.format(reply.author.mention))
+
+		if reply.content == "!blue" and len(blueTeam) <= 5:
+			if reply.author not in redTeam and reply.author not in blueTeam:
+				joinStr = "Agent {} has successfully joined the blue team."
+				await client.send_message(message.channel, joinStr.format(reply.author.mention))
+				blueTeam.append(reply.author)
+				fiveStr = "There are currently {} players on the blue team."
+				await client.send_message(message.channel, fiveStr.format(len(blueTeam)))
+				
+			else:
+				alreadyJoinedStr = "{} is already in a team or teams are full!"
+				await client.send_message(message.channel, alreadyJoinedStr.format(reply.author.mention))
+
+		
+		if reply.content == "!start" and len(playerlist) < 5:
+			await client.send_message(message.channel, notEnoughPlayers)
+		if reply.content == "!start" and len(playerlist) >= 5:
+			await loadrules(client,message,rules,roles,playerlist,len(playerlist))
+			random.seed(datetime.now())
+			gamestate[1] = randint(0,len(playerlist)-1)	#leadercounter
+			gamestate[0] = 2
+		if reply.content == "!stop":
+			stopStr = "```Game Ended```\nStart a new game with `!codenames` or type `!help` for instructions on how to play."
+			await client.send_message(message.channel, stopStr)
+			gamestate = 0
+			
+
+	#temporal	
 	redSpymaster = message.author
 	
 	for x in range(0,25):
